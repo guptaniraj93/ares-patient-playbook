@@ -121,7 +121,7 @@ function render(){
 document.getElementById("nav").innerHTML=Object.entries(labels).map(([k,v])=>'<button data-nav="'+k+'" class="'+(page===k?"active":"")+'">'+v+'</button>').join("");
 Object.keys(labels).forEach(k=>document.getElementById(k).hidden=k!==page);
 document.getElementById("heading").textContent=labels[page];
-if(page!=="billing"){document.getElementById(page).replaceChildren();document.getElementById("subtitle").textContent="";return;}
+if(page!=="billing"){document.getElementById(page).hidden=true;document.getElementById("subtitle").textContent="";return;}
 document.getElementById("subtitle").textContent=page==="journey"?"Hover over each stage for context and click for detailed instructions.":"Search the current section and use the linked workflows as reference.";
 let filtered=stages.filter(s=>(s.title+" "+s.summary+" "+s.steps.join(" ")).toLowerCase().includes(query));
 document.getElementById("stages").innerHTML=filtered.length?filtered.map(s=>'<button class="stage" data-stage="'+s.id+'" aria-label="Open '+esc(s.title)+'"><span class="num">'+s.id+'</span><h3>'+esc(s.title)+'</h3><p>'+esc(s.owner)+'</p><span class="tip">'+esc(s.summary)+'</span></button>').join(""):'<p class="empty">No matching stages.</p>';
