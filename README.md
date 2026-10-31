@@ -94,11 +94,13 @@ This is a **static process reference**, not connected to CRM, EHR, telephony, cl
 
 ## Deploy to Surge
 
-A GitHub Actions workflow at `.github/workflows/deploy-surge.yml` deploys `index.html` to Surge on pushes to `main` (and through manual **Run workflow**). No deployment occurs until credentials and a domain are configured.
+The GitHub Actions workflow at `.github/workflows/deploy-surge.yml` deploys the static `index.html` from `main` to the default domain `ares-patient-playbook.surge.sh`. It can also be run manually. **Deployment requires a Surge token stored as a GitHub Actions secret.** The Surge account email is `niraj@ghc.health`, but the workflow authenticates with the token, not the email.
 
-1. In the repository, open **Settings → Secrets and variables → Actions**.
-2. Create repository **secrets** `SURGE_TOKEN` (Surge authentication token) and `SURGE_LOGIN` (account email). Get the token locally by authenticating with Surge CLI and following Surge's token instructions; do not commit credentials.
-3. Create repository **variable** `SURGE_DOMAIN` with the intended full Surge hostname, such as `ares-patient-playbook.surge.sh` (only if available/owned).
-4. Open **Actions → Deploy Ares Playbook to Surge → Run workflow** or push a change to `index.html`. Inspect the workflow run for the actual published URL or any authentication/domain errors.
+1. On your own computer, with Node.js installed, run `npx --yes surge@latest login` and log in with `niraj@ghc.health` (or use `npx --yes surge@latest login --browser`).
+2. Run `npx --yes surge@latest tokens add --domain ares-patient-playbook.surge.sh -m "Ares GitHub Actions"`. Copy the displayed token directly into GitHub's secret form. **Do not paste it in chat or commit it.**
+3. In `https://github.com/guptaniraj93/ares-patient-playbook/settings/secrets/actions`, add a repository secret called `SURGE_TOKEN`. The workflow does not require `SURGE_LOGIN`.
+4. If you want another Surge hostname, add the repository variable `SURGE_DOMAIN` under Actions variables; otherwise the default above is used. If you change the hostname, mint a token scoped to that domain.
+5. In GitHub Actions, open **Deploy Ares Playbook to Surge** and choose **Run workflow** on `main`. Verify a successful deployment before sharing the site.
 
-Only public-safe reference material should be published; do not add real patient PHI to the static site.
+**Warning:** Surge domains are public websites unless private access is explicitly configured and verified. The static SOP contains no patient records; never publish PHI, credentials, call recordings, or sensitive internal materials without appropriate access controls.
+
