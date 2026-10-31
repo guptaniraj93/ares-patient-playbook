@@ -32,6 +32,10 @@ The document **“CCM + RPM Workflow — Step 0 to Payment” (30 Oct 2026)** id
 
 Treat this as a **source-proposed billing model requiring operational and credentialing sign-off**, not proof that every enrollment, Medicare rule, payer contract, NPI, claims route or telehealth visit is verified.
 
+## Call Scripts tab
+
+The **Call Scripts** tab contains 12 draft, searchable, role-filterable voice-call guides from live lead transfer through physician intake, CCM-first consent, monthly care, separate optional RPM enrollment, device assistance, clinical escalation and disenrollment. Each includes suggested dialogue, record requirements, exception handling and a copy control. Scripts are not connected to Aircall and have not received clinical or compliance approval.
+
 ## Tool ownership in the Workflow tab
 
 The **Workflow** tab is the active section; the other tabs are intentionally blank. Tool mapping is a proposed integration/ownership model, not a claim that integrations are live.
