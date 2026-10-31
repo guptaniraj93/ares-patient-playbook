@@ -18,7 +18,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ vars.SURGE_DOMAIN != '' }}
+    env:
+      # Override in Settings → Secrets and variables → Actions → Variables if needed.
+      SURGE_DOMAIN: ${{ vars.SURGE_DOMAIN || 'ares-patient-playbook.surge.sh' }}
     steps:
       - name: Checkout site
         uses: actions/checkout@v4
@@ -30,12 +32,17 @@ jobs:
         run: |
           mkdir -p dist
           cp index.html dist/index.html
+      - name: Check Surge authentication
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        run: |
+          if [ -z "$SURGE_TOKEN" ]; then
+            echo "::error::Missing SURGE_TOKEN secret. Log in to Surge as niraj@ghc.health, mint a domain-scoped token, then add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
       - name: Deploy to Surge
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
-          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_DOMAIN: ${{ vars.SURGE_DOMAIN }}
         run: |
-          test -n "$SURGE_TOKEN" || { echo "::error::Missing SURGE_TOKEN repository secret"; exit 1; }
-          test -n "$SURGE_LOGIN" || { echo "::error::Missing SURGE_LOGIN repository secret"; exit 1; }
-          npx --yes surge ./dist "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
+          npx --yes surge@latest ./dist "$SURGE_DOMAIN"
+          echo "Published to https://$SURGE_DOMAIN"
