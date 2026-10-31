@@ -1,0 +1,41 @@
+name: Deploy Ares Playbook to Surge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '.github/workflows/deploy-surge.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: surge-deployment
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.SURGE_DOMAIN != '' }}
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare static site
+        run: |
+          mkdir -p dist
+          cp index.html dist/index.html
+      - name: Deploy to Surge
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_DOMAIN: ${{ vars.SURGE_DOMAIN }}
+        run: |
+          test -n "$SURGE_TOKEN" || { echo "::error::Missing SURGE_TOKEN repository secret"; exit 1; }
+          test -n "$SURGE_LOGIN" || { echo "::error::Missing SURGE_LOGIN repository secret"; exit 1; }
+          npx --yes surge ./dist "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
