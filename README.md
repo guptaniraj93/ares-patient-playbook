@@ -32,6 +32,21 @@ The document **“CCM + RPM Workflow — Step 0 to Payment” (30 Oct 2026)** id
 
 Treat this as a **source-proposed billing model requiring operational and credentialing sign-off**, not proof that every enrollment, Medicare rule, payer contract, NPI, claims route or telehealth visit is verified.
 
+## Tool ownership in the Workflow tab
+
+The **Workflow** tab is the active section; the other tabs are intentionally blank. Tool mapping is a proposed integration/ownership model, not a claim that integrations are live.
+
+| Tool | Role | Primary workflow stages |
+| --- | --- | --- |
+| CRM (not selected) | Operational patient status, daily queue, task routing, enrollment and follow-up automation | 1–5, 7–8 |
+| Aircall | Live lead transfers, calls, follow-up transfers, approved SMS | 1–5 |
+| Doxy.me | Video-first physician visits (fallback via phone when documented) | 2 and follow-ups |
+| Practice Fusion | Clinical source of truth: patient demographics, Medicare ID, encounters, diagnoses, care plan and consent | 1–7 |
+| ChronicCareIQ | RPM readings and device status; candidate source of clinical minutes subject to vendor/billing validation | 4–5, 7 |
+| Grove billing, SPOT / clearinghouse | Claim preparation/submission, payments, ERA, denials and reconciliation | 0, 6–8 |
+
+**Proposed interfaces:** Aircall → CRM (calls and transfers); Practice Fusion → CRM (confirmed CCM enrollment and welcome-message trigger); CCIQ → CRM (monitoring tasks); CCIQ → billing (validated time and RPM evidence); billing → CRM (claim/denial task visibility). Confirm API availability, HIPAA/BAA and record ownership before implementing.
+
 ## Key unresolved decisions
 
 - Does ChronicCareIQ offer a patient portal (notwithstanding the Ares decision not to use one)?
