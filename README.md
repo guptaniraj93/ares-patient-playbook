@@ -61,3 +61,14 @@ The **Workflow** tab is the active section; the other tabs are intentionally bla
 ## Important boundaries
 
 This is a **static process reference**, not connected to CRM, EHR, telephony, clinical triage, billing or payment systems. Do not enter protected health information (PHI). Any scripts, thresholds, time accounting, Medicare code rules and legal statements require approval from Grove's clinical, billing and compliance leads before use in production.
+
+## Deploy to Surge
+
+A GitHub Actions workflow at `.github/workflows/deploy-surge.yml` deploys `index.html` to Surge on pushes to `main` (and through manual **Run workflow**). No deployment occurs until credentials and a domain are configured.
+
+1. In the repository, open **Settings → Secrets and variables → Actions**.
+2. Create repository **secrets** `SURGE_TOKEN` (Surge authentication token) and `SURGE_LOGIN` (account email). Get the token locally by authenticating with Surge CLI and following Surge's token instructions; do not commit credentials.
+3. Create repository **variable** `SURGE_DOMAIN` with the intended full Surge hostname, such as `ares-patient-playbook.surge.sh` (only if available/owned).
+4. Open **Actions → Deploy Ares Playbook to Surge → Run workflow** or push a change to `index.html`. Inspect the workflow run for the actual published URL or any authentication/domain errors.
+
+Only public-safe reference material should be published; do not add real patient PHI to the static site.
